@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Using org-mode to create posts</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="title" content="Using org-mode to create posts"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2012-03-11 dom"/>
+<meta name="author" content="Diego Sevilla"/>
+<meta name="description" content=""/>
+<meta name="keywords" content="general org-mode emacs english"/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Using org-mode to create posts</h1>
+
+<p>Some time ago I decided to change my Common-Lisp based blog generator
+to an Emacs-based one. And it was to learn Emacs-Lisp (compared
+to Common-Lisp, that I had used before), but mostly to use the
+wonderful org-mode to write posts.
+</p>
+<p>
+At first I thought that it would be nice to write the posts using Lisp
+alone. Using some HTML-generating library it would be easy to write
+posts like I write Lisp. However, posts have much more text than
+markup, and within lisp (unless you write some reader macro, that I
+may explore in the future), you have to add all those quotes,
+<i>backquoting</i> to eliminate special characters, etc. Posts look like
+this:
+</p>
+
+
+
+<pre class="src src-lisp">(fmb-new-post
+ <span style="color: #32cd32;">"Let Over Lambda--50 years of Lisp"</span>
+ <span style="color: #40e0d0;">:body</span> (__ (h:p  <span style="color: #32cd32;">"Hoy por casualidad he encontrado esta referencia, "</span>
+               (h:a '((href . <span style="color: #32cd32;">"http://letoverlambda.com/index.cl/guest/chap2.html"</span>))
+                  <span style="color: #32cd32;">"Let Over Lambda, Closures"</span>) <span style="color: #32cd32;">" de Doug Hoyte. Es</span>
+<span style="color: #32cd32;">                  curioso que sin haberlo le&#237;do antes, la soluci&#243;n que</span>
+<span style="color: #32cd32;">                  he dado al problema de extraer la descripci&#243;n de una</span>
+<span style="color: #32cd32;">                  entrada del blog sin "</span> (h:em <span style="color: #32cd32;">"tags"</span>) <span style="color: #32cd32;">" HTML ha sido</span>
+<span style="color: #32cd32;">                  as&#237; usando un "</span> (h:em <span style="color: #32cd32;">"closure"</span>) <span style="color: #32cd32;">"."</span>))
+ <span style="color: #40e0d0;">:categories</span> '(espa&#241;ol spanish programming lisp common-lisp blog)
+ <span style="color: #40e0d0;">:hours</span> 23
+ <span style="color: #40e0d0;">:minutes</span> 06
+ <span style="color: #40e0d0;">:day</span> 9
+ <span style="color: #40e0d0;">:month</span> 'october
+ <span style="color: #40e0d0;">:year</span> 2011)
+</pre>
+
+
+<p>
+I was happy because I could practice Lisp any time I wrote a
+post. However, this is not very comfortable, and when I had to
+include code snippets things got worse.
+</p>
+<p>
+At the same time, I got impressed by the work of
+<a href="http://reginald.braythwayt.com/">Reg Braithwaite</a> with his blog
+<a href="https://github.com/raganwald/homoiconic">Homoiconic</a>. Thanks to the
+formatting capabilities of GitHub, he can write just Markdown files,
+and, with a directory structure that resembles years and months, he
+can write his blog. The name is representative, also, as it is the
+characteristic of programming languages that can treat code as data
+and vice versa (such as Lisp). However, I find much more interesting
+<a href="http://www.orgmode.org">org-mode</a> than Markdown, so I decided I
+wanted to do something similar.
+</p>
+<p>
+Being written in Common Lisp, I had no library or implementation of
+the complete org-mode, so I decided, also to test other lisps, to use
+Emacs-Lisp and to use the characteristics of org-mode directly to
+produce the HTML that goes into posts, and even to support its
+tangling feature (more on that later). Also, it allowed me to have
+<a href="https://github.com/dsevilla/functional-mind-blog/tree/emacs-lisp-version/blog/content/posts">a directory</a> in which all the posts live, and be able to browse them
+just using GitHub (where this blog now lives), as now GitHub also
+renders org-mode content (not quite correctly, but acceptably.)
+</p>
+<p>
+The code that generates the HTML from the org-mode files is the
+following. It uses a function to obtain all the <code>.org</code> files, and with
+them, obtains the file properties, title, date, and categories, and
+generates the HTML with <code>org-export-region-as-html</code>:
+</p>
+
+
+
+<pre class="src src-emacs-lisp">(<span style="color: #6495ed; font-weight: bold;">defun</span> <span style="color: #87ceeb;">fmb-import-org-posts</span> ()
+  <span style="color: #32cd32;">"Import all posts written in .org files.</span>
+<span style="color: #32cd32;">Search all .org files, create a buffer for each of them,</span>
+<span style="color: #32cd32;">extract all the initial properties (export properties), and then generate</span>
+<span style="color: #32cd32;">the HTML equivalent of the body. Add it to the list of actual posts, that</span>
+<span style="color: #32cd32;">will be ordered by date finally."</span>
+  (<span style="color: #6495ed; font-weight: bold;">dolist</span> (f (fmb-files-in-below-directory <span style="color: #32cd32;">"content/posts"</span>))
+    (<span style="color: #6495ed; font-weight: bold;">with-current-buffer</span> (find-file-noselect f)
+      (<span style="color: #6495ed; font-weight: bold;">let*</span> ((file-properties (org-infile-export-plist))
+             (title (plist-get file-properties <span style="color: #40e0d0;">:title</span>))
+             (date (plist-get file-properties <span style="color: #40e0d0;">:date</span>))
+             (categories (plist-get file-properties <span style="color: #40e0d0;">:keywords</span>))
+             (body-as-html (org-export-region-as-html
+                            (point-min)
+                            (point-max)
+                            t 'string)))
+        (<span style="color: #6495ed; font-weight: bold;">multiple-value-bind</span> (secs mins hours day month year)
+            (org-parse-time-string date)
+          (fmb-new-post title
+                        <span style="color: #40e0d0;">:day</span> day
+                        <span style="color: #40e0d0;">:month</span> month
+                        <span style="color: #40e0d0;">:year</span> year
+                        <span style="color: #40e0d0;">:hours</span> hours
+                        <span style="color: #40e0d0;">:minutes</span> mins
+                        <span style="color: #40e0d0;">:categories</span> (mapcar #'(<span style="color: #6495ed; font-weight: bold;">lambda</span> (s) (intern s))
+                                            (split-string categories nil t))
+                        <span style="color: #40e0d0;">:body</span> body-as-html))
+      (kill-buffer)))))
+</pre>
+
+
+<p>
+Categories are extracted from the <code>#+KEYWORDS</code> option. For example,
+the few initial lines of this post:
+</p>
+
+
+
+<pre class="src src-org"><span style="color: #b3b3b3;">#+TITLE:</span><span style="color: #66cdaa;">     </span><span style="color: #afeeee; font-size: 144%; font-weight: bold;">Using org-mode to create posts</span>
+<span style="color: #b3b3b3;">#+AUTHOR:</span><span style="color: #66cdaa;">    </span><span style="color: #afeeee;">Diego Sevilla</span>
+<span style="color: #b3b3b3;">#+EMAIL:</span><span style="color: #66cdaa;">     </span><span style="color: #afeeee;">dsevilla@ditec.um.es</span>
+<span style="color: #b3b3b3;">#+DATE:</span><span style="color: #66cdaa;">      </span><span style="color: #afeeee;">2012-03-11 dom</span>
+<span style="color: #66cdaa;">#+DESCRIPTION:</span>
+<span style="color: #66cdaa;">#+KEYWORDS:  general org-mode emacs english</span>
+<span style="color: #66cdaa;">#+LANGUAGE:  en</span>
+
+Some time ago I decided to change my Common-Lisp based blog generator
+to an Emacs-based one. And it was to learn Emacs-Lisp (compared
+</pre>
+
+
+<p>
+Finally, as the great site <a href="http://nakkaya.com/">nakkaya.com</a>, I can
+offer, through <code>org-babel-tangle</code>, the generation of the files shown
+in the entry. See, for example,
+<a href="http://nakkaya.com/2011/06/29/ferret-an-experimental-clojure-compiler/">this entry about the Ferret compiler</a>. This open the world of Literate
+Programming also to this blog. All in all, a winning configuration.
+</p></div>
+
+<div id="postamble">
+<p class="date">Date: 2012-03-11 dom</p>
+<p class="author">Author: Diego Sevilla</p>
+<p class="creator">Org version 7.8.11 with Emacs version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>
